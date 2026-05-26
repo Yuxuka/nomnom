@@ -1,129 +1,681 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+<title>心動動｜貓狗喂食記錄🐾</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:"Huninn", sans-serif;
+  background:#fffaf4;
+  color:#5b4b42;
+  min-height:100vh;
+  padding:40px 20px 80px;
+}
+
+/* 背景裝飾 */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,#ffe8e8 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#fff1c9 0%,transparent 30%);
+  opacity:0.7;
+  z-index:-1;
+}
+
+/* header */
+
+.site-header{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.site-header h1{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.site-header p{
+  font-size:16px;
+  opacity:0.7;
+}
+
+/* tabs */
+
+.pet-tabs{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:35px;
+}
+
+.tab-btn{
+  border:none;
+  background:white;
+  padding:12px 18px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.2s;
+  box-shadow:0 3px 10px rgba(0,0,0,0.06);
+}
+
+.tab-btn:hover{
+  transform:translateY(-2px);
+}
+
+.tab-btn.active{
+  background:#ffd9d9;
+}
+
+/* content */
+
+#pet-content{
+  max-width:900px;
+  margin:auto;
+}
+
+/* card */
+
+.pet-card{
+  background:white;
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  display:none;
+  animation:fade 0.3s ease;
+}
+
+.pet-card.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* pet header */
+
+.pet-header{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:30px;
+}
+
+.pet-icon{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:#fff3e4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+}
+
+.pet-header h2{
+  font-size:32px;
+  margin-bottom:5px;
+}
+
+.pet-type{
+  display:inline-block;
+  background:#f4eee8;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:13px;
+  opacity:0.8;
+}
+
+/* info block */
+
+.info-block{
+  background:#fffaf7;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:18px;
+}
+
+.info-block h3{
+  margin-bottom:15px;
+  font-size:20px;
+}
+
+/* food */
+
+.food-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.food-item{
+  background:white;
+  padding:10px 14px;
+  border-radius:999px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  font-size:15px;
+}
+
+/* combo */
+
+.combo-box{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.plus{
+  font-size:22px;
+  opacity:0.5;
+}
+
+/* tags */
+
+.tag-list{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.tag{
+  background:#ffe8a3;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+
+/* memo */
+
+.memo-text{
+  line-height:1.8;
+}
+
+/* empty */
+
+.empty{
+  opacity:0.5;
+}
+
+/* mobile */
+
+@media(max-width:700px){
+
+  .site-header h1{
+    font-size:30px;
+  }
+
+  .pet-card{
+    padding:22px;
+  }
+
+  .pet-header h2{
+    font-size:26px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
 <header class="site-header">
 
-  <h1>
-    🐾 沃的貓貓狗狗在吃什麼
-  </h1>
+  <h1>心動動｜貓狗喂食記錄🐾</h1>
 
   <p>
-    貓貓狗狗的喜好紀錄手帳
+    沃的貓貓狗狗都在吃什麼？
   </p>
 
 </header>
 
-<nav class="pet-tabs">
+<nav class="pet-tabs" id="pet-tabs"></nav>
 
-  <button class="tab active">
-    🐱 咪咪
-  </button>
+<main id="pet-content"></main>
 
-  <button class="tab">
-    🐶 Latte
-  </button>
+<script>
 
-</nav>
+const pets = [
 
-<section class="pet-card">
+  {
+    id:"sesame_cake",
+    name:"芝麻糕",
+    type:"CAT",
+    icon:"🐱",
+    love:[
+      "🐟 小魚乾",
+      "🍗 雞胸肉"
+    ],
 
-  <!-- 標題 -->
-  <div class="pet-header">
+    combo:[
+      {
+        foods:["🥛 牛奶","🐟 小魚乾"],
+        note:"說了喜歡！"
+      }
+    ],
 
-    <div class="pet-icon">
-      🐱
-    </div>
+    picky:[
+      "🍅 番茄"
+    ],
 
-    <div>
-      <h2>咪咪</h2>
-      <span class="pet-type">
-        CAT
-      </span>
-    </div>
+    unknown:[
+      "🍰 草莓蛋糕",
+      "🧀 起司"
+    ],
 
-  </div>
+    tags:[
+      "多人驗證",
+      "已確認"
+    ],
 
-  <!-- 愛心食物 -->
-  <div class="info-block love">
+    memo:"你到底愛吃什麼東東？"
+  },
 
-    <h3>
-      ❤️ 有愛心反應
-    </h3>
+  {
+    id:"pumpkin_pie",
+    name:"南瓜派",
+    type:"CAT",
+    icon:"🐱",
 
-    <div class="food-list">
+    love:[
+      "🥩 牛肉"
+    ],
 
-      <div class="food-item">
-        🐟 小魚乾
+    combo:[
+      {
+        foods:["🍖 骨頭","🥛 牛奶"],
+        note:"有愛心"
+      }
+    ],
+
+    picky:[
+      "🥦 花椰菜"
+    ],
+
+    unknown:[
+      "🍓 草莓"
+    ],
+
+    tags:[
+      "玩家回報"
+    ],
+
+    memo:"目前還在測試更多組合。"
+  }
+
+{
+    id:"bubble_milktea",
+    name:"珍珠奶茶",
+    type:"DOG",
+    icon:"🐶",
+
+    love:[
+      "🥩 牛肉"
+    ],
+
+    combo:[
+      {
+        foods:["🍖 骨頭","🥛 牛奶"],
+        note:"有愛心"
+      }
+    ],
+
+    picky:[
+      "🥦 花椰菜"
+    ],
+
+    unknown:[
+      "🍓 草莓"
+    ],
+
+    tags:[
+      "玩家回報"
+    ],
+
+    memo:"目前還在測試更多組合。"
+  }
+
+{
+    id:"taro_toast",
+    name:"芋泥肉鬆吐司",
+    type:"DOG",
+    icon:"🐶",
+
+    love:[
+      "🥩 牛肉"
+    ],
+
+    combo:[
+      {
+        foods:["🍖 骨頭","🥛 牛奶"],
+        note:"有愛心"
+      }
+    ],
+
+    picky:[
+      "🥦 花椰菜"
+    ],
+
+    unknown:[
+      "🍓 草莓"
+    ],
+
+    tags:[
+      "玩家回報"
+    ],
+
+    memo:"目前還在測試更多組合。"
+  }
+
+{
+    id:"sushimi",
+    name:"溪溪咪",
+    type:"CAT",
+    icon:"🐱",
+
+    love:[
+      "🥩 牛肉"
+    ],
+
+    combo:[
+      {
+        foods:["🍖 骨頭","🥛 牛奶"],
+        note:"有愛心"
+      }
+    ],
+
+    picky:[
+      "🥦 花椰菜"
+    ],
+
+    unknown:[
+      "🍓 草莓"
+    ],
+
+    tags:[
+      "玩家回報"
+    ],
+
+    memo:"目前還在測試更多組合。"
+  }
+
+];
+
+
+/* =========================
+   生成 tab
+========================= */
+
+const tabsContainer = document.getElementById("pet-tabs");
+
+pets.forEach((pet,index)=>{
+
+  const button = document.createElement("button");
+
+  button.className = "tab-btn";
+
+  if(index === 0){
+    button.classList.add("active");
+  }
+
+  button.innerHTML = `
+    ${pet.icon} ${pet.name}
+  `;
+
+  button.onclick = ()=>{
+
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach(btn=>{
+        btn.classList.remove("active");
+      });
+
+    button.classList.add("active");
+
+    showPet(pet.id);
+  };
+
+  tabsContainer.appendChild(button);
+
+});
+
+
+/* =========================
+   生成卡片
+========================= */
+
+const content = document.getElementById("pet-content");
+
+pets.forEach((pet,index)=>{
+
+  const card = document.createElement("section");
+
+  card.className = "pet-card";
+
+  if(index === 0){
+    card.classList.add("active");
+  }
+
+  card.id = pet.id;
+
+  card.innerHTML = `
+
+    <div class="pet-header">
+
+      <div class="pet-icon">
+        ${pet.icon}
       </div>
 
-      <div class="food-item">
-        🍗 雞肉
+      <div>
+
+        <h2>${pet.name}</h2>
+
+        <span class="pet-type">
+          ${pet.type}
+        </span>
+
       </div>
 
     </div>
 
-  </div>
 
-  <!-- 喜歡組合 -->
-  <div class="info-block combo">
+    <!-- 愛心 -->
 
-    <h3>
-      ✨ 喜歡組合
-    </h3>
+    <div class="info-block">
 
-    <div class="combo-box">
+      <h3>❤️</h3>
 
-      <div class="food-item">
-        🥛 牛奶
-      </div>
+      <div class="food-list">
 
-      <span class="plus">
-        +
-      </span>
+        ${
+          pet.love.length
+          ?
+          pet.love.map(food=>
+            `<div class="food-item">${food}</div>`
+          ).join("")
+          :
+          `<p class="empty">尚無資料</p>`
+        }
 
-      <div class="food-item">
-        🐟 小魚乾
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- 挑食 -->
-  <div class="info-block picky">
-
-    <h3>
-      ❌ 挑食
-    </h3>
-
-    <div class="food-list">
-
-      <div class="food-item">
-        🍅 番茄
       </div>
 
     </div>
 
-  </div>
 
-  <!-- 未測試 -->
-  <div class="info-block unknown">
+    <!-- 喜歡組合 -->
 
-    <h3>
-      ❔ 尚未測試
-    </h3>
+    <div class="info-block">
 
-  </div>
+      <h3>❤️✨</h3>
 
-  <!-- 備註 -->
-  <div class="info-block memo">
+      ${
+        pet.combo.length
+        ?
+        pet.combo.map(combo=>`
 
-    <h3>
-      📝 備註
-    </h3>
+          <div class="combo-box">
 
-    <p>
-      晚上比較容易觸發喜歡
-    </p>
+            ${
+              combo.foods.map(food=>
+                `<div class="food-item">${food}</div>`
+              ).join(`<span class="plus">+</span>`)
+            }
 
-  </div>
+          </div>
 
-</section>
+          <p>${combo.note}</p>
 
+        `).join("")
+        :
+        `<p class="empty">尚無資料</p>`
+      }
+
+    </div>
+
+
+    <!-- 挑食 -->
+
+    <div class="info-block">
+
+      <h3>❌</h3>
+
+      <div class="food-list">
+
+        ${
+          pet.picky.length
+          ?
+          pet.picky.map(food=>
+            `<div class="food-item">${food}</div>`
+          ).join("")
+          :
+          `<p class="empty">尚無資料</p>`
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- 未測試 -->
+
+    <div class="info-block">
+
+      <h3>❔</h3>
+
+      <div class="food-list">
+
+        ${
+          pet.unknown.length
+          ?
+          pet.unknown.map(food=>
+            `<div class="food-item">${food}</div>`
+          ).join("")
+          :
+          `<p class="empty">全部測試完畢</p>`
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- 標籤 -->
+
+    <div class="info-block">
+
+      <h3>🏷️ 標籤</h3>
+
+      <div class="tag-list">
+
+        ${
+          pet.tags.length
+          ?
+          pet.tags.map(tag=>
+            `<div class="tag">${tag}</div>`
+          ).join("")
+          :
+          `<p class="empty">無標籤</p>`
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- 備註 -->
+
+    <div class="info-block">
+
+      <h3>📝 備註</h3>
+
+      <p class="memo-text">
+
+        ${
+          pet.memo
+          ?
+          pet.memo
+          :
+          "尚無備註"
+        }
+
+      </p>
+
+    </div>
+
+  `;
+
+  content.appendChild(card);
+
+});
+
+
+/* =========================
+   切換卡片
+========================= */
+
+function showPet(id){
+
+  document
+    .querySelectorAll(".pet-card")
+    .forEach(card=>{
+      card.classList.remove("active");
+    });
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+}
+
+</script>
+
+</body>
+</html>
