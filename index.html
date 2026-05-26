@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
-<title>心動動｜貓狗喂食記錄🐾</title>
+<title>心動動｜喂食記錄🐾</title>
 
 <style>
 
@@ -20,7 +20,7 @@
 body{
   font-family:"Huninn", sans-serif;
   background:#fffaf4;
-  color:#5b4b42;
+  color:#ae4b42;
   min-height:100vh;
   padding:40px 20px 80px;
 }
@@ -40,20 +40,19 @@ body::before{
 
 /* header */
 
-.site-header{
+.site-header {
   text-align:center;
-  margin-bottom:40px;
+  margin-bottom:20px;
 }
 
-.site-header h1{
-  font-size:40px;
+.site-header h1 {
   margin-bottom:10px;
 }
 
-.site-header p{
-  font-size:16px;
+.site-header p {
   opacity:0.7;
 }
+
 
 /* tabs */
 
@@ -65,22 +64,35 @@ body::before{
   margin-bottom:35px;
 }
 
-.tab-btn{
-  border:none;
-  background:white;
-  padding:12px 18px;
-  border-radius:999px;
+button {
+  padding: 8px 12px;
+  border-color: #fff;
+  border-radius: 12px;
+  margin: 2px;
+  background: #f7f0f0;
+  font-family: "Huninn", sans-serif;
+  font-size: 14px;
+  transition: 0.2s;
   cursor:pointer;
-  font-size:16px;
-  transition:0.2s;
-  box-shadow:0 3px 10px rgba(0,0,0,0.06);
 }
 
-.tab-btn:hover{
-  transform:translateY(-2px);
+/*.tab-btn{
+  background:white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-size: 14px;
+  transition: 0.2s;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}*/
+
+button:hover{
+  transform:translateY(-1px);
+  background: #f0d9dc;
+  border-color: #e092a8;
 }
 
-.tab-btn.active{
+button.active{
   background:#ffd9d9;
 }
 
@@ -249,7 +261,7 @@ body::before{
 
 <header class="site-header">
 
-  <h1>心動動｜貓狗喂食記錄🐾</h1>
+  <h1>喂食記錄🐾</h1>
 
   <p>
     沃的貓貓狗狗都在吃什麼？
@@ -257,7 +269,13 @@ body::before{
 
 </header>
 
-<nav class="pet-tabs" id="pet-tabs"></nav>
+<nav class="pet-tabs" id="pet-tabs">
+  <button class="tab-btn">芝麻糕</button>
+  <button class="tab-btn">南瓜派</button>
+  <button class="tab-btn">巧克力珍奶</button>
+  <button class="tab-btn">芋泥肉鬆吐司</button>
+  <button class="tab-btn">溪溪咪</button>
+</nav>
 
 <main id="pet-content"></main>
 
@@ -333,7 +351,7 @@ const pets = [
 
 {
     id:"bubble_milktea",
-    name:"珍珠奶茶",
+    name:"巧克力珍奶",
     type:"DOG",
     icon:"🐶",
 
