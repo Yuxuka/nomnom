@@ -153,6 +153,19 @@ button.active {
   opacity:0.8;
 }
 
+.pet-group {
+  display: inline-block;
+  background: #fff0dc;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.group-title {
+  margin-bottom: 6px;
+}
+
 /* info block */
 
 .info-block{
@@ -260,19 +273,56 @@ button.active {
 </header>
 
 <nav class="pet-tabs" id="pet-tabs">
-  <button class="tab-btn">芝麻糕</button>
-  <button class="tab-btn">南瓜派</button>
-  <button class="tab-btn">巧克力珍奶</button>
-  <button class="tab-btn">芋泥肉鬆吐司</button>
-  <button class="tab-btn">溪溪咪</button>
+  <div class="pet-group">
+    <div class="group-title">
+      🐈咪
+    </div>
+    <div class="group-buttons">
+      <button data-sheet="芝麻糕">芝麻糕</button>
+      <button data-sheet="南瓜派">南瓜派</button>
+      <button data-sheet="溪溪咪">溪溪咪</button>
+    </div>
+  </div>
+  <div class="pet-group">
+    <div class="group-title">
+      🐕沃
+    </div>
+    <div class="group-buttons">
+      <button data-sheet="巧克力珍奶">巧克力珍奶</button>
+      <button data-sheet="芋泥肉鬆吐司">芋泥肉鬆吐司</button>
+    </div>
+  </div>
 </nav>
 
 <main id="pet-content"></main>
 
 <script>
 const SHEET_ID = "1Ngle-qFpZJdjYtrWxJ3frfiHcAJMFIqUDN4cgQ2o-P4";
+
+let currentSheet = localStorage.getItem("currentSheet") || "芝麻糕";
+
 function getURL(sheetName) {
   return `https://opensheet.elk.sh/${SHEET_ID}/${sheetName}`;
+}
+
+function switchSheet(name) {
+  currentSheet = name;
+  localStorage.setItem("currentSheet", name);
+  document.getElementById("search").value = "";
+  
+  updateActiveTabs();
+  updateActiveButtons();
+  loadData();
+}
+
+function updateActiveTabs() {
+  document.querySelectorAll("#tabs button").forEach(btn => {
+    btn.classList.remove("active-ui");
+
+    if (btn.dataset.sheet === currentSheet) {
+      btn.classList.add("active-ui");
+    }
+  });
 }
 
 const pets = [
@@ -304,7 +354,6 @@ const pets = [
     ],
 
     tags:[
-      "多人驗證",
       "已確認"
     ],
 
@@ -452,8 +501,6 @@ pets.forEach((pet,index)=>{
 
   const button = document.createElement("button");
 
-  button.className = "tab-btn";
-
   if(index === 0){
     button.classList.add("active");
   }
@@ -465,7 +512,7 @@ pets.forEach((pet,index)=>{
   button.onclick = ()=>{
 
     document
-      .querySelectorAll(".tab-btn")
+      .querySelectorAll("button")
       .forEach(btn=>{
         btn.classList.remove("active");
       });
