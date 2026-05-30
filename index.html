@@ -176,9 +176,13 @@ button.active {
   margin-bottom:18px;
 }
 
-.info-block h3{
+.info-block h3 {
   margin-bottom:15px;
   font-size:20px;
+}
+
+.card h2 {
+  margin-bottom: 12px;
 }
 
 /* food */
@@ -279,9 +283,9 @@ button.active {
       🐈咪
     </div>
     <div class="group-buttons">
-      <button data-sheet="芝麻糕">芝麻糕</button>
-      <button data-sheet="南瓜派">南瓜派</button>
-      <button data-sheet="溪溪咪">溪溪咪</button>
+      <button data-sheet="芝麻糕" onclick="switchSheet('芝麻糕')">芝麻糕</button>
+      <button data-sheet="南瓜派" onclick="switchSheet('南瓜派')">南瓜派</button>
+      <button data-sheet="溪溪咪" onclick="switchSheet('溪溪咪')">溪溪咪</button>
     </div>
   </div>
   <div class="pet-group">
@@ -289,8 +293,8 @@ button.active {
       🐕沃
     </div>
     <div class="group-buttons">
-      <button data-sheet="巧克力珍奶">巧克力珍奶</button>
-      <button data-sheet="芋泥肉鬆吐司">芋泥肉鬆吐司</button>
+      <button data-sheet="巧克力珍奶" onclick="switchSheet('巧克力珍奶')">巧克力珍奶</button>
+      <button data-sheet="芋泥肉鬆吐司" onclick="switchSheet('芋泥肉鬆吐司')">芋泥肉鬆吐司</button>
     </div>
   </div>
 </nav>
@@ -306,434 +310,141 @@ function getURL(sheetName) {
   return `https://opensheet.elk.sh/${SHEET_ID}/${sheetName}`;
 }
 
-function switchSheet(name) {
-  currentSheet = name;
-  localStorage.setItem("currentSheet", name);
-  document.getElementById("search").value = "";
+async function loadData() {
+
+  const response =
+    await fetch(getURL(currentSheet));
+
+  const data =
+    await response.json();
+
+  renderPet(data);
+
+}
+
+
+function renderPet(data) {
+
+  const content =
+    document.getElementById("pet-content");
+
+  let love = [];
+  let neutral = [];
+  let dislike = [];
+  let trying = [];
+
+  data.forEach(item => {
+
+    if (item.trying === "TRUE") {
+
+      trying.push(item.dish);
+
+    }
+
+    else if (item.preference === "❤︎") {
+
+      love.push(item.dish);
+
+    }
+
+    else if (item.preference === "▲") {
+
+      neutral.push(item.dish);
+
+    }
+
+    else if (item.preference === "✖") {
+
+      dislike.push(item.dish);
+
+    }
+
+  });
+
+  content.innerHTML = `
   
+  <section class="pet-card active">
+
+    <h2>${currentSheet}</h2>
+
+    <div class="info-block">
+      <h3>❤️ 喜歡</h3>
+      <div class="food-list">
+        ${love.map(food =>
+          `<div class="food-item">${food}</div>`
+        ).join("")}
+      </div>
+    </div>
+
+    <div class="info-block">
+      <h3>▲ 普通</h3>
+      <div class="food-list">
+        ${neutral.map(food =>
+          `<div class="food-item">${food}</div>`
+        ).join("")}
+      </div>
+    </div>
+
+    <div class="info-block">
+      <h3>❌ 挑食</h3>
+      <div class="food-list">
+        ${dislike.map(food =>
+          `<div class="food-item">${food}</div>`
+        ).join("")}
+      </div>
+    </div>
+
+    <div class="info-block">
+      <h3>❔ 測試中</h3>
+      <div class="food-list">
+        ${trying.map(food =>
+          `<div class="food-item">${food}</div>`
+        ).join("")}
+      </div>
+    </div>
+
+  </section>
+
+  `;
+}
+
+
+
+function switchSheet(name) {
+
+  currentSheet = name;
+
+  localStorage.setItem(
+    "currentSheet",
+    name
+  );
+
   updateActiveTabs();
-  updateActiveButtons();
+
   loadData();
+
 }
 
 function updateActiveTabs() {
-  document.querySelectorAll("#tabs button").forEach(btn => {
-    btn.classList.remove("active-ui");
-
-    if (btn.dataset.sheet === currentSheet) {
-      btn.classList.add("active-ui");
-    }
-  });
-}
-
-const pets = [
-
-  {
-    id:"sesame_cake",
-    name:"芝麻糕",
-    type:"CAT",
-    icon:"🐱",
-    love:[
-      "🐟 小魚乾",
-      "🍗 雞胸肉"
-    ],
-
-    combo:[
-      {
-        foods:["🥛 牛奶","🐟 小魚乾"],
-        note:"說了喜歡！"
-      }
-    ],
-
-    picky:[
-      "🍅 番茄"
-    ],
-
-    unknown:[
-      "🍰 草莓蛋糕",
-      "🧀 起司"
-    ],
-
-    tags:[
-      "已確認"
-    ],
-
-    memo:"你到底愛吃什麼東東？"
-  },
-
-  {
-    id:"pumpkin_pie",
-    name:"南瓜派",
-    type:"CAT",
-    icon:"🐱",
-
-    love:[
-      "🥩 牛肉"
-    ],
-
-    combo:[
-      {
-        foods:["🍖 骨頭","🥛 牛奶"],
-        note:"有愛心"
-      }
-    ],
-
-    picky:[
-      "🥦 花椰菜"
-    ],
-
-    unknown:[
-      "🍓 草莓"
-    ],
-
-    tags:[
-      "玩家回報"
-    ],
-
-    memo:"目前還在測試更多組合。"
-  },
-
-  {
-    id:"bubble_milktea",
-    name:"巧克力珍奶",
-    type:"DOG",
-    icon:"🐶",
-
-    love:[
-      "🥩 牛肉"
-    ],
-
-    combo:[
-      {
-        foods:["🍖 骨頭","🥛 牛奶"],
-        note:"有愛心"
-      }
-    ],
-
-    picky:[
-      "🥦 花椰菜"
-    ],
-
-    unknown:[
-      "🍓 草莓"
-    ],
-
-    tags:[
-      "玩家回報"
-    ],
-
-    memo:"目前還在測試更多組合。"
-  },
-
-  {
-    id:"taro_toast",
-    name:"芋泥肉鬆吐司",
-    type:"DOG",
-    icon:"🐶",
-
-    love:[
-      "🥩 牛肉"
-    ],
-
-    combo:[
-      {
-        foods:["🍖 骨頭","🥛 牛奶"],
-        note:"有愛心"
-      }
-    ],
-
-    picky:[
-      "🥦 花椰菜"
-    ],
-
-    unknown:[
-      "🍓 草莓"
-    ],
-
-    tags:[
-      "玩家回報"
-    ],
-
-    memo:"目前還在測試更多組合。"
-  },
-
-  {
-    id:"sushimi",
-    name:"溪溪咪",
-    type:"CAT",
-    icon:"🐱",
-
-    love:[
-      "🥩 牛肉"
-    ],
-
-    combo:[
-      {
-        foods:["🍖 骨頭","🥛 牛奶"],
-        note:"有愛心"
-      }
-    ],
-
-    picky:[
-      "🥦 花椰菜"
-    ],
-
-    unknown:[
-      "🍓 草莓"
-    ],
-
-    tags:[
-      "玩家回報"
-    ],
-
-    memo:"目前還在測試更多組合。"
-  }
-
-];
-
-
-/* =========================
-   生成 tab
-========================= */
-
-const tabsContainer = document.getElementById("pet-tabs");
-
-pets.forEach((pet,index)=>{
-
-  const button = document.createElement("button");
-
-  if(index === 0){
-    button.classList.add("active");
-  }
-
-  button.innerHTML = `
-    ${pet.icon} ${pet.name}
-  `;
-
-  button.onclick = ()=>{
-
-    document
-      .querySelectorAll("button")
-      .forEach(btn=>{
-        btn.classList.remove("active");
-      });
-
-    button.classList.add("active");
-
-    showPet(pet.id);
-  };
-
-  tabsContainer.appendChild(button);
-
-});
-
-
-/* =========================
-   生成卡片
-========================= */
-
-const content = document.getElementById("pet-content");
-
-pets.forEach((pet,index)=>{
-
-  const card = document.createElement("section");
-
-  card.className = "pet-card";
-
-  if(index === 0){
-    card.classList.add("active");
-  }
-
-  card.id = pet.id;
-
-  card.innerHTML = `
-
-    <div class="pet-header">
-
-      <div class="pet-icon">
-        ${pet.icon}
-      </div>
-
-      <div>
-
-        <h2>${pet.name}</h2>
-
-        <span class="pet-type">
-          ${pet.type}
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <!-- 愛心 -->
-
-    <div class="info-block">
-
-      <h3>❤️</h3>
-
-      <div class="food-list">
-
-        ${
-          pet.love.length
-          ?
-          pet.love.map(food=>
-            `<div class="food-item">${food}</div>`
-          ).join("")
-          :
-          `<p class="empty">尚無資料</p>`
-        }
-
-      </div>
-
-    </div>
-
-
-    <!-- 喜歡組合 -->
-
-    <div class="info-block">
-
-      <h3>❤️✨</h3>
-
-      ${
-        pet.combo.length
-        ?
-        pet.combo.map(combo=>`
-
-          <div class="combo-box">
-
-            ${
-              combo.foods.map(food=>
-                `<div class="food-item">${food}</div>`
-              ).join(`<span class="plus">+</span>`)
-            }
-
-          </div>
-
-          <p>${combo.note}</p>
-
-        `).join("")
-        :
-        `<p class="empty">尚無資料</p>`
-      }
-
-    </div>
-
-
-    <!-- 挑食 -->
-
-    <div class="info-block">
-
-      <h3>❌</h3>
-
-      <div class="food-list">
-
-        ${
-          pet.picky.length
-          ?
-          pet.picky.map(food=>
-            `<div class="food-item">${food}</div>`
-          ).join("")
-          :
-          `<p class="empty">尚無資料</p>`
-        }
-
-      </div>
-
-    </div>
-
-
-    <!-- 未測試 -->
-
-    <div class="info-block">
-
-      <h3>❔</h3>
-
-      <div class="food-list">
-
-        ${
-          pet.unknown.length
-          ?
-          pet.unknown.map(food=>
-            `<div class="food-item">${food}</div>`
-          ).join("")
-          :
-          `<p class="empty">全部測試完畢</p>`
-        }
-
-      </div>
-
-    </div>
-
-
-    <!-- 標籤 -->
-
-    <div class="info-block">
-
-      <h3>🏷️ 標籤</h3>
-
-      <div class="tag-list">
-
-        ${
-          pet.tags.length
-          ?
-          pet.tags.map(tag=>
-            `<div class="tag">${tag}</div>`
-          ).join("")
-          :
-          `<p class="empty">無標籤</p>`
-        }
-
-      </div>
-
-    </div>
-
-
-    <!-- 備註 -->
-
-    <div class="info-block">
-
-      <h3>📝 備註</h3>
-
-      <p class="memo-text">
-
-        ${
-          pet.memo
-          ?
-          pet.memo
-          :
-          "尚無備註"
-        }
-
-      </p>
-
-    </div>
-
-  `;
-
-  content.appendChild(card);
-
-});
-
-
-/* =========================
-   切換卡片
-========================= */
-
-function showPet(id){
 
   document
-    .querySelectorAll(".pet-card")
-    .forEach(card=>{
-      card.classList.remove("active");
+    .querySelectorAll("[data-sheet]")
+    .forEach(btn => {
+
+      btn.classList.remove("active");
+
+      if (
+        btn.dataset.sheet === currentSheet
+      ) {
+        btn.classList.add("active");
+      }
+
     });
-
-  document
-    .getElementById(id)
-    .classList.add("active");
-
 }
+
+
+updateActiveTabs();
+loadData();
 
 </script>
 
