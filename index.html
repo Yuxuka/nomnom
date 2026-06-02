@@ -283,9 +283,9 @@ button.active {
       🐈咪
     </div>
     <div class="group-buttons">
-      <button data-sheet="芝麻糕" onclick="switchSheet('芝麻糕')">芝麻糕</button>
-      <button data-sheet="南瓜派" onclick="switchSheet('南瓜派')">南瓜派</button>
-      <button data-sheet="溪溪咪" onclick="switchSheet('溪溪咪')">溪溪咪</button>
+      <button data-pet="芝麻糕" data-type="cat">芝麻糕</button>
+      <button data-pet="南瓜派" data-type="cat">南瓜派</button>
+      <button data-pet="溪溪咪" data-type="cat">溪溪咪</button>
     </div>
   </div>
   <div class="pet-group">
@@ -293,8 +293,8 @@ button.active {
       🐕沃
     </div>
     <div class="group-buttons">
-      <button data-sheet="巧克力珍奶" onclick="switchSheet('巧克力珍奶')">巧克力珍奶</button>
-      <button data-sheet="芋泥肉鬆吐司" onclick="switchSheet('芋泥肉鬆吐司')">芋泥肉鬆吐司</button>
+      <button data-pet="巧克力珍奶" data-type="dog">巧克力珍奶</button>
+      <button data-pet="芋泥肉鬆吐司" data-type="dog">芋泥肉鬆吐司</button>
     </div>
   </div>
 </nav>
@@ -304,7 +304,7 @@ button.active {
 <script>
 const SHEET_ID = "1Ngle-qFpZJdjYtrWxJ3frfiHcAJMFIqUDN4cgQ2o-P4";
 
-let currentSheet = localStorage.getItem("currentSheet") || "芝麻糕";
+let currentPet = localStorage.getItem("currentPet") || "芝麻糕";
 
 function getURL(sheetName) {
   return `https://opensheet.elk.sh/${SHEET_ID}/${sheetName}`;
@@ -313,12 +313,56 @@ function getURL(sheetName) {
 async function loadData() {
 
   const response =
-    await fetch(getURL(currentSheet));
+    await fetch(getURL(getSheetName()));
 
   const data =
-    await response.json();
+  await response.json();
 
   renderPet(data);
+}
+
+
+function getSheetName() {
+
+  const activeBtn =
+    document.querySelector(
+      `[data-pet="${currentPet}"]`
+    );
+
+  if(!activeBtn) {
+    return "貓食";
+  }
+
+  return(
+    activeBtn.dataset.type === "cat"
+    ? "貓食"
+    : "狗食"
+  );
+}
+
+
+function getPetData() {
+
+  const saved =
+    localStorage.getItem("petData");
+
+  return saved
+    ? JSON.parse(saved)
+    : {};
+
+}
+
+
+function getFoodStatus(foodName) {
+
+  const petData =
+    getPetData();
+
+  const pet =
+    petData[currentPet] || {};
+
+  return pet[foodName]?.status
+    || "trying";
 
 }
 
@@ -333,29 +377,32 @@ function renderPet(data) {
   let dislike = [];
   let trying = [];
 
-  data.forEach(item => {
+data.forEach(item => {
 
-    if (item.trying === "TRUE") {
+  const status =
+    getFoodStatus(item.dish);
 
-      trying.push(item.dish);
-
-    }
-
-    else if (item.preference === "❤︎") {
+        if(status === "love"){
 
       love.push(item.dish);
 
     }
 
-    else if (item.preference === "▲") {
+    else if(status === "neutral"){
 
       neutral.push(item.dish);
 
     }
 
-    else if (item.preference === "✖") {
+    else if(status === "dislike"){
 
       dislike.push(item.dish);
+
+    }
+
+    else{
+
+      trying.push(item.dish);
 
     }
 
@@ -365,7 +412,7 @@ function renderPet(data) {
   
   <section class="pet-card active">
 
-    <h2>${currentSheet}</h2>
+    <h2>${currentPet}</h2>
 
     <div class="info-block">
       <h3>❤️ 喜歡</h3>
@@ -410,37 +457,46 @@ function renderPet(data) {
 
 
 
-function switchSheet(name) {
 
-  currentSheet = name;
-
-  localStorage.setItem(
-    "currentSheet",
-    name
-  );
-
-  updateActiveTabs();
-
-  loadData();
-
-}
 
 function updateActiveTabs() {
 
   document
-    .querySelectorAll("[data-sheet]")
+    .querySelectorAll("[data-pet]")
     .forEach(btn => {
 
       btn.classList.remove("active");
 
       if (
-        btn.dataset.sheet === currentSheet
+        btn.dataset.pet === currentPet
       ) {
         btn.classList.add("active");
       }
 
     });
 }
+
+document
+  .querySelectorAll("[data-pet]")
+  .forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      currentPet =
+        btn.dataset.pet;
+
+      localStorage.setItem(
+        "currentPet",
+        currentPet
+      );
+
+      updateActiveTabs();
+
+      loadData();
+
+    });
+
+  });
 
 
 updateActiveTabs();
