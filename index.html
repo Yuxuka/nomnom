@@ -382,37 +382,35 @@ data.forEach(item => {
   const status =
     getFoodStatus(item.dish);
 
-        if(status === "love"){
+      if(status === "love"){
+        love.push(item.dish);
+      }
 
-      love.push(item.dish);
+      else if(status === "neutral"){
+        neutral.push(item.dish);
+      }
 
-    }
+      else if(status === "dislike"){
+        dislike.push(item.dish);
+      }
 
-    else if(status === "neutral"){
-
-      neutral.push(item.dish);
-
-    }
-
-    else if(status === "dislike"){
-
-      dislike.push(item.dish);
-
-    }
-
-    else{
-
-      trying.push(item.dish);
-
-    }
+      else{
+        trying.push(item.dish);
+      }
 
   });
 
   content.innerHTML = `
   
   <section class="pet-card active">
-
-    <h2>${currentPet}</h2>
+    <div class="pet-header">
+      <div class="pet-icon">
+        😺
+      </div>
+      <div>
+        <h2>${currentPet}</h2>
+      </div>
+    </div>
 
     <div class="info-block">
       <h3>❤️ 喜歡</h3>
