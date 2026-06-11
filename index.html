@@ -12,145 +12,146 @@
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body{
-  font-family:"Huninn", sans-serif;
-  background:#fffaf4;
-  color:#ae4b42;
-  min-height:100vh;
-  padding:40px 20px 80px;
+  font-family: "Huninn", sans-serif;
+  background: #fffaf4;
+  color: #ae4b42;
+  min-height: 100vh;
+  padding: 40px 20px 80px;
 }
 
 /* 背景裝飾 */
 
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
+  content: "";
+  position: fixed;
+  inset: 0;
   background:
     radial-gradient(circle at top left,#ffe8e8 0%,transparent 30%),
     radial-gradient(circle at bottom right,#fff1c9 0%,transparent 30%);
-  opacity:0.7;
-  z-index:-1;
+  opacity: 0.7;
+  z-index: -1;
 }
 
 /* header */
 
 .site-header {
-  text-align:center;
-  margin-bottom:20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .site-header h1 {
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 
 .site-header p {
-  opacity:0.7;
+  opacity: 0.7;
 }
 
 
 /* tabs */
 
 .pet-tabs {
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-bottom:35px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 35px;
 }
 
 button {
   padding: 8px 12px;
-  border-color: #fff;
+  border: 2px outset #fff;
   border-radius: 12px;
   margin: 2px;
-  background: #f7ff7f7;
+  background: #f7f7f7;
   font-family: "Huninn", sans-serif;
   font-size: 14px;
   transition: 0.2s;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 button:hover {
-  transform:translateY(-1px);
+  transform: translateY(-2px);
   background: #f0d9dc;
   border-color: #e092a8;
 }
 
 button.active {
-  background:#ffd9d9;
+  background: #ffd9d9;
+  border-color: #e092a8;
 }
 
 /* content */
 
 #pet-content{
-  max-width:900px;
-  margin:auto;
+  max-width: 900px;
+  margin: auto;
 }
 
 /* card */
 
 .pet-card{
-  background:white;
-  border-radius:28px;
-  padding:30px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  display:none;
-  animation:fade 0.3s ease;
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  display: none;
+  animation: fade 0.3s ease;
 }
 
 .pet-card.active{
-  display:block;
+  display: block;
 }
 
 @keyframes fade{
   from{
-    opacity:0;
-    transform:translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to{
-    opacity:1;
-    transform:translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 /* pet header */
 
 .pet-header{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-bottom:30px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
 }
 
 .pet-icon{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  background:#fff3e4;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:34px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fff3e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
 }
 
 .pet-header h2{
-  font-size:32px;
-  margin-bottom:5px;
+  font-size: 32px;
+  margin-bottom: 5px;
 }
 
 .pet-type{
-  display:inline-block;
-  background:#f4eee8;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:13px;
-  opacity:0.8;
+  display: inline-block;
+  background: #f4eee8;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  opacity: 0.8;
 }
 
 .pet-group {
@@ -169,16 +170,16 @@ button.active {
 /* info block */
 
 .info-block{
-  background:#fffaf7;
+  background: #fffaf7;
   border: 1px solid #f5e7e3;
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:18px;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 18px;
 }
 
 .info-block h3 {
-  margin-bottom:15px;
-  font-size:20px;
+  margin-bottom: 15px;
+  font-size: 20px;
 }
 
 .card h2 {
@@ -188,60 +189,78 @@ button.active {
 /* food */
 
 .food-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .food-item{
-  background:white;
-  padding:10px 14px;
-  border-radius:999px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  font-size:15px;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 15px;
+}
+
+/* type groups */
+
+.type-group{
+  margin-bottom: 14px;
+}
+
+.type-title{
+  font-size: 16px;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.type-items{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* combo */
 
 .combo-box{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:12px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .plus{
-  font-size:22px;
-  opacity:0.5;
+  font-size: 22px;
+  opacity: 0.5;
 }
 
 /* tags */
 
 .tag-list{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .tag{
-  background:#ffe8a3;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:13px;
+  background: #ffe8a3;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
 /* memo */
 
 .memo-text{
-  line-height:1.8;
+  line-height: 1.8;
 }
 
 /* empty */
 
 .empty{
-  opacity:0.5;
+  opacity: 0.5;
 }
 
 /* mobile */
@@ -249,15 +268,15 @@ button.active {
 @media(max-width:700px){
 
   .site-header h1{
-    font-size:30px;
+    font-size: 30px;
   }
 
   .pet-card{
-    padding:22px;
+    padding: 22px;
   }
 
   .pet-header h2{
-    font-size:26px;
+    font-size: 26px;
   }
 
 }
@@ -310,102 +329,98 @@ function getURL(sheetName) {
   return `https://opensheet.elk.sh/${SHEET_ID}/${sheetName}`;
 }
 
-async function loadData() {
-
-  const response =
-    await fetch(getURL(getSheetName()));
-
-  const data =
-  await response.json();
-
-  renderPet(data);
+function getPetType() {
+  const activeBtn = document.querySelector(`[data-pet="${currentPet}"]`);
+  return activeBtn ? activeBtn.dataset.type : "cat";
 }
 
+async function loadData() {
+  try {
+    const response = await fetch(getURL(getSheetName()));
+    if (!response.ok) {
+      throw new Error("Failed to load sheet");
+    }
+    const data = await response.json();
+    renderPet(data);
+  } catch (error) {
+    renderError();
+  }
+}
 
 function getSheetName() {
-
-  const activeBtn =
-    document.querySelector(
-      `[data-pet="${currentPet}"]`
-    );
-
-  if(!activeBtn) {
-    return "貓食";
-  }
-
-  return(
-    activeBtn.dataset.type === "cat"
-    ? "貓食"
-    : "狗食"
-  );
+  const type = getPetType();
+  return type === "cat" ? "貓食" : "狗食";
 }
-
 
 function getPetData() {
-
-  const saved =
-    localStorage.getItem("petData");
-
-  return saved
-    ? JSON.parse(saved)
-    : {};
-
+  const saved = localStorage.getItem("petData");
+  return saved ? JSON.parse(saved) : {};
 }
-
 
 function getFoodStatus(foodName) {
-
-  const petData =
-    getPetData();
-
-  const pet =
-    petData[currentPet] || {};
-
-  return pet[foodName]?.status
-    || "trying";
-
+  const petData = getPetData();
+  const pet = petData[currentPet] || {};
+  return pet[foodName]?.status ?? "trying";
 }
 
+function getPetIcon() {
+  return getPetType() === "cat" ? "😺" : "🐶";
+}
+
+function groupByType(items) {
+  const grouped = {};
+  items.forEach(item => {
+    const type = item.type || "其他";
+    if (!grouped[type]) grouped[type] = [];
+    grouped[type].push(item.dish);
+  });
+  return grouped;
+}
+
+function renderFoodGroups(items) {
+  if (!items.length) {
+    return `<div class="empty">還沒找到沃</div>`;
+  }
+
+  const grouped = groupByType(items);
+
+  return Object.entries(grouped).map(([type, dishes]) => `
+    <div class="type-group">
+      <div class="type-title">${type}</div>
+      <div class="type-items">
+        ${dishes.map(dish => `<div class="food-item">${dish}</div>`).join("")}
+      </div>
+    </div>
+  `).join("");
+}
 
 function renderPet(data) {
-
-  const content =
-    document.getElementById("pet-content");
+  const content = document.getElementById("pet-content");
 
   let love = [];
   let neutral = [];
   let dislike = [];
   let trying = [];
 
-data.forEach(item => {
+  data.forEach(item => {
+    const status = getFoodStatus(item.dish);
 
-  const status =
-    getFoodStatus(item.dish);
-
-      if(status === "love"){
-        love.push(item.dish);
-      }
-
-      else if(status === "neutral"){
-        neutral.push(item.dish);
-      }
-
-      else if(status === "dislike"){
-        dislike.push(item.dish);
-      }
-
-      else{
-        trying.push(item.dish);
-      }
-
+    if (status === "love") {
+      love.push(item);
+    } else if (status === "neutral") {
+      neutral.push(item);
+    } else if (status === "dislike") {
+      dislike.push(item);
+    } else {
+      trying.push(item);
+    }
   });
 
   content.innerHTML = `
-  
   <section class="pet-card active">
     <div class="pet-header">
       <div class="pet-icon">
-        😺
+        ${getPetIcon()}
       </div>
       <div>
         <h2>${currentPet}</h2>
@@ -414,92 +429,66 @@ data.forEach(item => {
 
     <div class="info-block">
       <h3>❤️ 喜歡</h3>
-      <div class="food-list">
-        ${love.map(food =>
-          `<div class="food-item">${food}</div>`
-        ).join("")}
+      <div>
+        ${renderFoodGroups(love)}
       </div>
     </div>
 
     <div class="info-block">
       <h3>▲ 普通</h3>
-      <div class="food-list">
-        ${neutral.map(food =>
-          `<div class="food-item">${food}</div>`
-        ).join("")}
+      <div>
+        ${renderFoodGroups(neutral)}
       </div>
     </div>
 
     <div class="info-block">
       <h3>❌ 挑食</h3>
-      <div class="food-list">
-        ${dislike.map(food =>
-          `<div class="food-item">${food}</div>`
-        ).join("")}
+      <div>
+        ${renderFoodGroups(dislike)}
       </div>
     </div>
 
     <div class="info-block">
       <h3>❔ 測試中</h3>
-      <div class="food-list">
-        ${trying.map(food =>
-          `<div class="food-item">${food}</div>`
-        ).join("")}
+      <div>
+        ${renderFoodGroups(trying)}
       </div>
     </div>
-
   </section>
-
   `;
 }
 
-
-
-
-
-function updateActiveTabs() {
-
-  document
-    .querySelectorAll("[data-pet]")
-    .forEach(btn => {
-
-      btn.classList.remove("active");
-
-      if (
-        btn.dataset.pet === currentPet
-      ) {
-        btn.classList.add("active");
-      }
-
-    });
+function renderError() {
+  document.getElementById("pet-content").innerHTML = `
+    <section class="pet-card active">
+      <div class="info-block">
+        <h3>找不到沃</h3>
+        <div class="empty">等一下下</div>
+      </div>
+    </section>
+  `;
 }
 
-document
-  .querySelectorAll("[data-pet]")
-  .forEach(btn => {
-
-    btn.addEventListener("click", () => {
-
-      currentPet =
-        btn.dataset.pet;
-
-      localStorage.setItem(
-        "currentPet",
-        currentPet
-      );
-
-      updateActiveTabs();
-
-      loadData();
-
-    });
-
+function updateActiveTabs() {
+  document.querySelectorAll("[data-pet]").forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.dataset.pet === currentPet) {
+      btn.classList.add("active");
+    }
   });
+}
 
+document.querySelectorAll("[data-pet]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentPet = btn.dataset.pet;
+    localStorage.setItem("currentPet", currentPet);
+    updateActiveTabs();
+    loadData();
+  });
+});
 
 updateActiveTabs();
 loadData();
-
 </script>
 
 </body>
