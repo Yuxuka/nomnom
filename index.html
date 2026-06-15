@@ -281,6 +281,44 @@ button.active {
 
 }
 
+.food-item{
+  cursor:pointer;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(500px,90vw);
+  background:white;
+  border-radius:20px;
+  padding:24px;
+}
+
+.modal-divider{
+  border:none;
+  border-top:1px solid #f0dfd8;
+  margin:16px 0;
+}
+
+.status-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
+
 </style>
 </head>
 
@@ -318,9 +356,18 @@ button.active {
   </div>
 </nav>
 
+<div id="foodModal" class="modal">
+  <div class="modal-box">
+    <div id="modalContent">
+    </div>
+  </div>
+</div>
+
 <main id="pet-content"></main>
 
 <script>
+let currentFoods = [];
+    
 const SHEET_ID = "1Ngle-qFpZJdjYtrWxJ3frfiHcAJMFIqUDN4cgQ2o-P4";
 
 let currentPet = localStorage.getItem("currentPet") || "芝麻糕";
@@ -363,6 +410,12 @@ function getFoodStatus(foodName) {
   return pet[foodName]?.status ?? "trying";
 }
 
+function getTestedStars(foodName) {
+  const petData = getPetData();
+  const pet = petData[currentPet] || {};
+  return pet[foodName]?.testedStars || [];
+}
+
 function getPetIcon() {
   return getPetType() === "cat" ? "😺" : "🐶";
 }
@@ -388,7 +441,15 @@ function renderFoodGroups(items) {
     <div class="type-group">
       <div class="type-title">${type}</div>
       <div class="type-items">
-        ${dishes.map(dish => `<div class="food-item">${dish}</div>`).join("")}
+        ${items
+          .filter(item => item.type === type)
+          .map(item => `
+            <div class="food-item" onclick="openFoodModal('${item.dish}')" >
+      ${item.dish}
+    </div>
+  `)
+  .join("")
+}
       </div>
     </div>
   `).join("");
@@ -396,6 +457,7 @@ function renderFoodGroups(items) {
 
 function renderPet(data) {
   const content = document.getElementById("pet-content");
+  currentFoods = data;
 
   let love = [];
   let neutral = [];
@@ -469,6 +531,17 @@ function renderError() {
   `;
 }
 
+function renderStars(maxStar, testedStars) {
+  let html = "";
+  for(let i = 1; i <= maxStar; i++) {
+    html += testedStars.includes(i)
+      ? "✦ "
+      : "⟡ ";
+  }
+
+  return html;
+}
+
 function updateActiveTabs() {
   document.querySelectorAll("[data-pet]").forEach(btn => {
     btn.classList.remove("active");
@@ -486,6 +559,88 @@ document.querySelectorAll("[data-pet]").forEach(btn => {
     loadData();
   });
 });
+
+function openFoodModal(foodName){
+  
+  const food =
+    currentFoods.find(
+      item => item.dish === foodName
+    );
+
+  const testedStars = getTestedStars(food.dish);
+  
+  if(!food) return;
+
+  document
+    .getElementById("modalContent")
+    .innerHTML = `
+
+      <h2>${food.dish}</h2>
+
+      ${food.type ? `<p>類型：${food.type}</p>` : ""}
+      ${food.level ? `<p>等級：${food.level}</p>` : "等級： -"}
+      ${food.period ? `<p>活躍時期：${food.period}</p>` : ""}
+      ${food.time_range ? `<p>時間段：${food.time_range}</p>` : ""}
+      ${food.weather ? `<p>天氣：${food.weather}</p>` : ""}
+      ${food.location ? `<p>地點：${food.location}</p>` : ""}
+      ${food.ingredients ? `<p>食材：${food.ingredients}</p>` : ""}
+      
+      <p>已測試：${renderStars(Number(food.star),testedStars)}
+      
+      <hr class="modal-divider">
+
+        <div class="status-buttons">
+
+          <button onclick="setFoodStatus('${food.dish}', 'love')">
+            ❤️ 喜歡
+          </button>
+
+          <button onclick="setFoodStatus('${food.dish}', 'dislike')">
+            ❌ 挑食
+          </button>
+
+          <button onclick="setFoodStatus('${food.dish}', 'neutral')">
+            ▲ 無感
+          </button>
+
+          <button onclick="setFoodStatus('${food.dish}', 'trying')">
+            ❔ 測試中
+          </button>
+
+        </div>
+
+        <hr class="modal-divider">
+
+      `;
+      
+      
+
+  document
+    .getElementById("foodModal")
+    .classList
+    .add("show");
+
+}
+
+document
+  .getElementById("foodModal")
+  .addEventListener(
+    "click",
+    e => {
+
+      if(
+        e.target.id === "foodModal"
+      ){
+
+        e.currentTarget
+          .classList
+          .remove("show");
+
+      }
+
+    }
+  );
+
 
 updateActiveTabs();
 loadData();
